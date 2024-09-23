@@ -1171,10 +1171,6 @@ bool is_gateway_target(const actor& caster, coord_def location)
     int abs_x = abs(delta.x);
     int abs_y = abs(delta.y);
 
-    // location isn't on one of the 8 compass directions
-    if (abs_x != 0 && abs_y != 0 && abs_x != abs_y)
-        return false;
-
     // XXX: Can this just be you.current_vision?
     // Too large is fine, but inefficient
     const int current_vision = caster.is_player()
@@ -1198,14 +1194,16 @@ coord_def find_gateway_location(actor* caster)
         ? you.current_vision
         : LOS_MAX_RANGE;
 
-    for (int i = 0; i < 8; ++i)
+    for (int x = -current_vision; x <= current_vision; ++x)
     {
-        const coord_def delta = Compass[i];
-
-        for (int t = 2; t <= current_vision; ++t)
+        for (int y = -current_vision; y <= current_vision; ++y)
         {
-            const coord_def test = caster->pos() + delta * t;
+            const coord_def delta{ x, y };
+            // location is to close
+            if (delta.rdist() < 2)
+                continue;
 
+            const coord_def test = caster->pos() + delta;
             if (_is_malign_gateway_summoning_spot(*caster, test, false))
                 points.push_back(test);
         }
