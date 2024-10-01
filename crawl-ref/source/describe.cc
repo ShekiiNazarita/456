@@ -2677,7 +2677,7 @@ static string _describe_gizmo(const item_def &item)
 
             case SPGIZMO_PARRYREV:
                 ret += "Your AC increases as you Rev (up to +5) and while "
-                       "fully Revved, your attacks may disarm enemies.\n";
+                       "fully Revved, your melee attacks may disarm enemies.\n";
                 break;
 
             case SPGIZMO_AUTODAZZLE:
